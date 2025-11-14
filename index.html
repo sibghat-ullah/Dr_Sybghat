@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sibghat Ullah - AI Team Lead</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0a;
+            color: #f5f5f5;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        #background-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.15;
+        }
+
+        svg {
+            position: absolute;
+        }
+
+        /* Cursor Trail */
+        .cursor-trail {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 3px solid #ffd700;
+            position: relative;
+            z-index: 10;
+        }
+
+        .profile-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .profile-image-wrapper {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 4px solid #ffd700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+        }
+
+        .profile-image-wrapper:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(255, 215, 0, 0.6);
+        }
+
+        .profile-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.3s ease;
+        }
+
+        .profile-image.hidden {
+            opacity: 0;
+        }
+
+        .hover-message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #ffd700;
+            font-size: 14px;
+            text-align: center;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            width: 90%;
+            z-index: 10;
+        }
+
+        .hover-message.show {
+            opacity: 1;
+        }
+
+        h1 {
+            color: #ffd700;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #bbb;
+            font-size: 1.2em;
+            margin-bottom: 5px;
+        }
+
+        .location {
+            color: #ffd700;
+            font-size: 1em;
+        }
+
+        /* Navigation */
+        nav {
+            background-color: #1a1a1a;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 2px solid #ffd700;
+            position: sticky;
+            top: 0;
+            z-index: 20;
+        }
+
+        nav a {
+            color: #ffd700;
+            text-decoration: none;
+            margin: 0 20px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a:hover {
+            color: #fff;
+            transform: translateY(-2px);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: #ffd700;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        /* Main Content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            position: relative;
+            z-index: 5;
+        }
+
+        section {
+            margin-bottom: 60px;
+        }
+
+        h2 {
+            color: #ffd700;
+            font-size: 2em;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #ffd700;
+            display: inline-block;
+        }
+
+        /* About Section */
+        .about-text {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #ddd;
+            background: rgba(255, 215, 0, 0.05);
+            padding: 20px;
+            border-left: 4px solid #ffd700;
+            border-radius: 5px;
+        }
+
+        /* Projects Section */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        .project-card {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 215, 0, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .project-card:hover::before {
+            left: 100%;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.3);
+        }
+
+        .project-title {
+            color: #ffd700;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .project-desc {
+            color: #bbb;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .tech-tag {
+            background-color: #ffd700;
+            color: #000;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .project-metrics {
+            color: #ffd700;
+            font-size: 0.95em;
+            font-weight: 600;
+        }
+
+        /* Skills Section */
+        .skills-container {
+            margin-top: 30px;
+        }
+
+        .skills-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .skill-line-odd {
+            animation: slideLeft 15s linear infinite;
+        }
+
+        .skill-line-even {
+            animation: slideRight 15s linear infinite;
+        }
+
+        @keyframes slideLeft {
+            0% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100vw);
+                opacity: 0;
+            }
+        }
+
+        @keyframes slideRight {
+            0% {
+                transform: translateX(100vw);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+        }
+
+        .skill-item {
+            background: linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);
+            color: #000;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1em;
+            white-space: nowrap;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            display: inline-block;
+        }
+
+        /* AI Images */
+        .ai-images-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .ai-image-card {
+            background: #1a1a1a;
+            border: 2px solid #ffd700;
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .ai-image-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.4);
+        }
+
+        .ai-image-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .ai-image-title {
+            padding: 15px;
+            color: #ffd700;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        /* Research Section */
+        .research-item {
+            background: rgba(255, 215, 0, 0.05);
+            border-left: 4px solid #ffd700;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .research-item:hover {
+            background: rgba(255, 215, 0, 0.1);
+            transform: translateX(10px);
+        }
+
+        .research-title {
+            color: #ffd700;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .research-desc {
+            color: #bbb;
+            line-height: 1.6;
+        }
+
+        /* Footer */
+        footer {
+            background-color: #1a1a1a;
+            color: #ffd700;
+            text-align: center;
+            padding: 30px 20px;
+            border-top: 3px solid #ffd700;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .contact-item {
+            color: #ffd700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .contact-item:hover {
+            color: #fff;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.8em;
+            }
+
+            h2 {
+                font-size: 1.5em;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav a {
+                margin: 0 10px;
+                font-size: 0.9em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Container -->
+    <div id="background-container"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="profile-container">
+            <div class="profile-image-wrapper" id="profileWrapper">
+                <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/sibghat-preview-mulZsHnZslzDs6MUtJiEs7cIR5c266.png" 
+                     alt="Sibghat Ullah" class="profile-image" id="profileImage">
+                <div class="hover-message" id="hoverMessage">Please remove cursor from me</div>
+            </div>
+            <div>
+                <h1>Sibghat Ullah</h1>
+                <p class="subtitle">AI Team Lead</p>
+                <p class="location">📍 Islamabad, Pakistan</p>
+                <p class="subtitle" style="font-size: 0.95em; margin-top: 8px;">Senior AI Engineer | PhD in NLP | 10 Years Experience</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#research">Research</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- Main Content -->
+    <main>
+        <!-- About Section -->
+        <section id="about">
+            <h2>About</h2>
+            <p class="about-text">
+                Results-driven AI Transformation Leader specializing in enterprise-scale AI systems, NLP, and production ML deployment. 
+                Proven track record in building high-performance LLMs, multi-agent systems, and real-time AI applications with measurable business impact. 
+                Expert in leading cross-functional teams, driving digital transformation, and delivering AI solutions that generate significant ROI.
+            </p>
+        </section>
+
+        <!-- Projects Section -->
+        <section id="projects">
+            <h2>Featured Projects</h2>
+            <div class="projects-grid">
+                <div class="project-card">
+                    <div class="project-title">🎙️ Real-Time Voice AI System</div>
+                    <div class="project-desc">Enterprise-grade voice interaction system with ultra-low latency and high accuracy for customer engagement.</div>
+                    <div class="project-tech">
+                        <span class="tech-tag">Deepgram</span>
+                        <span class="tech-tag">Vapi</span>
+                        <span class="tech-tag">GPT-4o-mini</span>
+                        <span class="tech-tag">WebRTC</span>
+                    </div>
+                    <div class="project-metrics">⚡ 840ms latency | 98% accuracy</div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-title">🔧 High-Performance Customer LLM</div>
+                    <div class="project-desc">Enterprise-scale LLM trained on 800,000+ text instances with zero-downtime architecture.</div>
+                    <div class="project-tech">
+                        <span class="tech-tag">PyTorch</span>
+                        <span class="tech-tag">FastAPI</span>
+                        <span class="tech-tag">Kubernetes</span>
+                        <span class="tech-tag">Redis</span>
+                    </div>
+                    <div class="project-metrics">📊 800K+ training instances | 99.99% uptime</div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-title">✍️ Multi-Agent Content Generation</div>
+                    <div class="project-desc">AI strategy for academic content generation with governance rules preventing plagiarism.</div>
+                    <div class="project-tech">
+                        <span class="tech-tag">CrewAI</span>
+                        <span class="tech-tag">GPT-4o-mini</span>
+                        <span class="tech-tag">React.js</span>
+                        <span class="tech-tag">Vector DB</span>
+                    </div>
+                    <div class="project-metrics">🎓 Multi-agent orchestration | Plagiarism detection</div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-title">🤖 AI-Generated Text Detection</div>
+                    <div class="project-desc">High-accuracy AI detection model fine-tuned on extensive datasets with compliance checks.</div>
+                    <div class="project-tech">
+                        <span class="tech-tag">LLaMA</span>
+                        <span class="tech-tag">Transformers</span>
+                        <span class="tech-tag">FastAPI</span>
+                        <span class="tech-tag">PostgreSQL</span>
+                    </div>
+                    <div class="project-metrics">🎯 96.5% detection rate | Real-time inference</div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-title">💬 Domain-Specific BERT Chatbot</div>
+                    <div class="project-desc">Fine-tuned BERT-based chatbot for academic FAQ systems aligned with institutional goals.</div>
+                    <div class="project-tech">
+                        <span class="tech-tag">BERT</span>
+                        <span class="tech-tag">FastAPI</span>
+                        <span class="tech-tag">React.js</span>
+                        <span class="tech-tag">MongoDB</span>
+                    </div>
+                    <div class="project-metrics">⚡ <200ms response | Institutional deployment</div>
+                </div>
+
+                <div class="project-card">
+                    <div class="project-title">📈 Deep Learning Trading Platform</div>
+                    <div class="project-desc">Automated cryptocurrency trading platform with ethical AI decision-making and risk management.</div>
+                    <div class="project-tech">
+                        <span class="tech-tag">LSTM</span>
+                        <span class="tech-tag">Deep Learning</span>
+                        <span class="tech-tag">WebSocket</span>
+                        <span class="tech-tag">React.js</span>
+                    </div>
+                    <div class="project-metrics">📊 Predictive models | Financial compliance</div>
+                </div>
+            </div>
+
+            <!-- AI Images -->
+            <h2 style="margin-top: 50px;">AI Technology Showcase</h2>
+            <div class="ai-images-grid">
+                <div class="ai-image-card">
+                    <img src="/placeholder.svg?height=200&width=250" alt="Neural Networks">
+                    <div class="ai-image-title">Neural Networks</div>
+                </div>
+                <div class="ai-image-card">
+                    <img src="/placeholder.svg?height=200&width=250" alt="Machine Learning">
+                    <div class="ai-image-title">ML Algorithms</div>
+                </div>
+                <div class="ai-image-card">
+                    <img src="/placeholder.svg?height=200&width=250" alt="NLP">
+                    <div class="ai-image-title">NLP Processing</div>
+                </div>
+                <div class="ai-image-card">
+                    <img src="/placeholder.svg?height=200&width=250" alt="Cloud Infrastructure">
+                    <div class="ai-image-title">Cloud Infrastructure</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills">
+            <h2>Technical Expertise</h2>
+            <div class="skills-container">
+                <!-- AI & Machine Learning -->
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #ffd700; margin-bottom: 15px;">AI & Machine Learning</h3>
+                    <div class="skills-row skill-line-odd">
+                        <span class="skill-item">Large Language Models (LLMs)</span>
+                        <span class="skill-item">Natural Language Processing</span>
+                        <span class="skill-item">Computer Vision</span>
+                        <span class="skill-item">Deep Learning (PyTorch, TensorFlow)</span>
+                        <span class="skill-item">Model Fine-tuning & Training</span>
+                    </div>
+                </div>
+
+                <!-- Backend & Infrastructure -->
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #ffd700; margin-bottom: 15px;">Backend & Infrastructure</h3>
+                    <div class="skills-row skill-line-even">
+                        <span class="skill-item">Node.js & Express.js</span>
+                        <span class="skill-item">FastAPI & Python</span>
+                        <span class="skill-item">MLOps & Model Deployment</span>
+                        <span class="skill-item">Kubernetes & Docker</span>
+                        <span class="skill-item">Microservices Architecture</span>
+                    </div>
+                </div>
+
+                <!-- Frontend & Full Stack -->
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #ffd700; margin-bottom: 15px;">Frontend & Full Stack</h3>
+                    <div class="skills-row skill-line-odd">
+                        <span class="skill-item">React.js & Next.js</span>
+                        <span class="skill-item">JavaScript/TypeScript</span>
+                        <span class="skill-item">RESTful & GraphQL APIs</span>
+                        <span class="skill-item">WebSocket & Real-time Apps</span>
+                        <span class="skill-item">State Management (Redux)</span>
+                    </div>
+                </div>
+
+                <!-- Data & Databases -->
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #ffd700; margin-bottom: 15px;">Data & Databases</h3>
+                    <div class="skills-row skill-line-even">
+                        <span class="skill-item">Vector Databases (Pinecone, Weaviate)</span>
+                        <span class="skill-item">MongoDB & PostgreSQL</span>
+                        <span class="skill-item">Redis & Caching</span>
+                        <span class="skill-item">ETL & Data Processing</span>
+                        <span class="skill-item">Big Data Technologies</span>
+                    </div>
+                </div>
+
+                <!-- Leadership & Strategy -->
+                <div style="margin-bottom: 20px;">
+                    <h3 style="color: #ffd700; margin-bottom: 15px;">Leadership & Strategy</h3>
+                    <div class="skills-row skill-line-odd">
+                        <span class="skill-item">AI Strategy Development</span>
+                        <span class="skill-item">Digital Transformation</span>
+                        <span class="skill-item">AI Governance & Ethics</span>
+                        <span class="skill-item">Cross-functional Collaboration</span>
+                        <span class="skill-item">KPI-Driven Performance</span>
+                    </div>
+                </div>
+
+                <!-- Specialized Domains -->
+                <div>
+                    <h3 style="color: #ffd700; margin-bottom: 15px;">Specialized Domains</h3>
+                    <div class="skills-row skill-line-even">
+                        <span class="skill-item">Voice AI Systems</span>
+                        <span class="skill-item">Conversational AI & Chatbots</span>
+                        <span class="skill-item">Content Generation Systems</span>
+                        <span class="skill-item">Financial ML & Trading</span>
+                        <span class="skill-item">Healthcare AI Solutions</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Research Section -->
+        <section id="research">
+            <h2>Research & Publications</h2>
+
+            <div style="margin-bottom: 30px;">
+                <h3 style="color: #ffd700; margin-bottom: 20px;">📚 Published Book</h3>
+                <div class="research-item">
+                    <div class="research-title">Venturing into the Jungle Depths and Conquering Neural Networks Wilderness</div>
+                    <div class="research-desc">A comprehensive journey through neural networks designed for students, researchers, and tech enthusiasts. This book simplifies complex deep learning concepts and provides clarity on the AI frontier.</div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 30px;">
+                <h3 style="color: #ffd700; margin-bottom: 20px;">📄 Research Papers</h3>
+                <div class="research-item">
+                    <div class="research-title">Deep Auto Encoder based Chat bot for Discrete Math Course</div>
+                    <div class="research-desc">Novel approach to educational chatbots using deep auto-encoders for mathematics education.</div>
+                </div>
+                <div class="research-item">
+                    <div class="research-title">A Survey of the Self Supervised Learning Mechanisms for Vision Transformers</div>
+                    <div class="research-desc">Comprehensive survey on self-supervised learning techniques in modern vision transformer architectures.</div>
+                </div>
+            </div>
+
+            <div>
+                <h3 style="color: #ffd700; margin-bottom: 20px;">🎓 PhD & Mentoring</h3>
+                <div class="research-item">
+                    <div class="research-title">PhD Research - PIEAS</div>
+                    <div class="research-desc"><strong>Focus:</strong> Predictive Analytics using Deep Auto Encoder Decoder Architecture | <strong>Areas:</strong> NLP & Image Analysis</div>
+                </div>
+                <div class="research-item">
+                    <div class="research-title">Students Supervised</div>
+                    <div class="research-desc"><strong>MS Students:</strong> Business Documents data extraction and classification | <strong>BS Students:</strong> 2D/3D Human Pose Estimation, University FAQ Chatbots, Mental Health Chatbot, Medical Student Assistant</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <h2 style="border-bottom: none; display: block; margin-bottom: 20px;">Get In Touch</h2>
+            <div class="contact-info">
+                <a href="mailto:[email protected]" class="contact-item">✉️ [email protected]</a>
+                <span class="contact-item">📞 +92 335 5866759</span>
+                <span class="contact-item">📍 Islamabad, Pakistan</span>
+            </div>
+            <p style="margin-top: 20px; color: #999;">© 2025 Sibghat Ullah. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Cursor Trail Effect
+        const trailCanvas = document.createElement('canvas');
+        trailCanvas.style.position = 'fixed';
+        trailCanvas.style.top = '0';
+        trailCanvas.style.left = '0';
+        trailCanvas.style.pointerEvents = 'none';
+        trailCanvas.style.zIndex = '9998';
+        document.body.appendChild(trailCanvas);
+
+        const ctx = trailCanvas.getContext('2d');
+        trailCanvas.width = window.innerWidth;
+        trailCanvas.height = window.innerHeight;
+
+        let trails = [];
+
+        document.addEventListener('mousemove', (e) => {
+            trails.push({
+                x: e.clientX,
+                y: e.clientY,
+                life: 1
+            });
+        });
+
+        function animateTrail() {
+            ctx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+
+            trails = trails.filter(trail => trail.life > 0);
+
+            trails.forEach((trail, index) => {
+                trail.life -= 0.03;
+                const opacity = trail.life;
+
+                ctx.strokeStyle = `rgba(255, 215, 0, ${opacity * 0.6})`;
+                ctx.lineWidth = 3;
+                ctx.lineCap = 'round';
+
+                if (index > 0) {
+                    ctx.beginPath();
+                    ctx.moveTo(trails[index - 1].x, trails[index - 1].y);
+                    ctx.lineTo(trail.x, trail.y);
+                    ctx.stroke();
+                }
+            });
+
+            requestAnimationFrame(animateTrail);
+        }
+
+        animateTrail();
+
+        // Profile Image Hover Effect
+        const profileWrapper = document.getElementById('profileWrapper');
+        const profileImage = document.getElementById('profileImage');
+        const hoverMessage = document.getElementById('hoverMessage');
+
+        profileWrapper.addEventListener('mouseenter', () => {
+            profileImage.classList.add('hidden');
+            hoverMessage.classList.add('show');
+        });
+
+        profileWrapper.addEventListener('mouseleave', () => {
+            profileImage.classList.remove('hidden');
+            hoverMessage.classList.remove('show');
+        });
+
+        // Animated Background - Moving SVG Graphics
+        const bgContainer = document.getElementById('background-container');
+
+        function createAnimatedSVG(id, x, y) {
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', '150');
+            svg.setAttribute('height', '150');
+            svg.setAttribute('viewBox', '0 0 150 150');
+            svg.style.position = 'absolute';
+            svg.style.left = x + 'px';
+            svg.style.top = y + 'px';
+            svg.id = id;
+
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', '75');
+            circle.setAttribute('cy', '75');
+            circle.setAttribute('r', '40');
+            circle.setAttribute('fill', 'none');
+            circle.setAttribute('stroke', '#ffd700');
+            circle.setAttribute('stroke-width', '2');
+
+            const innerCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            innerCircle.setAttribute('cx', '75');
+            innerCircle.setAttribute('cy', '75');
+            innerCircle.setAttribute('r', '25');
+            innerCircle.setAttribute('fill', 'none');
+            innerCircle.setAttribute('stroke', '#ffd700');
+            innerCircle.setAttribute('stroke-width', '1');
+            innerCircle.setAttribute('opacity', '0.5');
+
+            const dots = [];
+            for (let i = 0; i < 8; i++) {
+                const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                const angle = (i / 8) * Math.PI * 2;
+                const dotX = 75 + Math.cos(angle) * 35;
+                const dotY = 75 + Math.sin(angle) * 35;
+                dot.setAttribute('cx', dotX);
+                dot.setAttribute('cy', dotY);
+                dot.setAttribute('r', '3');
+                dot.setAttribute('fill', '#ffd700');
+                dot.classList.add('orbit-dot');
+                svg.appendChild(dot);
+                dots.push(dot);
+            }
+
+            svg.appendChild(circle);
+            svg.appendChild(innerCircle);
+
+            bgContainer.appendChild(svg);
+            return { svg, dots };
+        }
+
+        // Create multiple animated SVGs
+        const animations = [
+            createAnimatedSVG('orbit1', 50, 100),
+            createAnimatedSVG('orbit2', 300, 200),
+            createAnimatedSVG('orbit3', 600, 400),
+            createAnimatedSVG('orbit4', 100, 600)
+        ];
+
+        let rotation = 0;
+
+        function animateBackground() {
+            rotation += 0.5;
+
+            animations.forEach((anim, index) => {
+                const svg = anim.svg;
+                const startX = [50, 300, 600, 100][index];
+                const startY = [100, 200, 400, 600][index];
+                const speed = 0.3 + index * 0.1;
+
+                const offsetX = Math.sin(rotation * speed * 0.01) * 30;
+                const offsetY = Math.cos(rotation * speed * 0.01) * 30;
+
+                svg.style.left = (startX + offsetX) + 'px';
+                svg.style.top = (startY + offsetY) + 'px';
+
+                anim.svg.style.transform = `rotate(${rotation * speed}deg)`;
+            });
+
+            requestAnimationFrame(animateBackground);
+        }
+
+        animateBackground();
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            trailCanvas.width = window.innerWidth;
+            trailCanvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
