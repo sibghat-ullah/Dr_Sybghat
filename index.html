@@ -450,6 +450,21 @@
                 font-size: 0.9em;
             }
         }
+        audio {
+  width: 100%;
+  height: 40px;
+  filter: sepia(100%) saturate(500%) hue-rotate(10deg) brightness(0.9);
+}
+
+audio::-webkit-media-controls-panel {
+  background-color: #ffd700;
+}
+
+audio::-webkit-media-controls-play-button,
+audio::-webkit-media-controls-current-time-display,
+audio::-webkit-media-controls-time-remaining-display {
+  color: #000;
+}
     </style>
 </head>
 <body>
@@ -507,7 +522,11 @@
                         <span class="tech-tag">GPT-4o-mini</span>
                         <span class="tech-tag">WebRTC</span>
                     </div>
-                    <div class="project-metrics">⚡ 840ms latency | 98% accuracy</div>
+                    <div class="project-metrics">⚡ 840ms latency | 99% accuracy</div>
+                    <audio controls>
+                    <source src="audio/sample.wav" type="audio/mpeg">
+                    Your browser does not support the audio element.
+                    </audio>
                 </div>
 
                 <div class="project-card">
